@@ -4,6 +4,7 @@ import PIL.Image
 from IPython.display import display
 import tensorflow as tf
 import random
+import matplotlib.pyplot as plt
 
 def imshow(img: np.ndarray):
     """
@@ -39,4 +40,47 @@ def seed_everything(seed=42):
     random.seed(seed)
 
 plot_model = lambda m: tf.keras.utils.plot_model(m,to_file="./ignore/model.png",)
+
+def plot_history(history):
+    # Plot learning curves
+    plt.figure(figsize=(12, 4))
+
+    # Plot training & validation loss values
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('Loss curve')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend(['Train', 'Test'], loc='upper right')
+
+    # Plot training & validation accuracy values
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['mean_squared_error'])
+    plt.plot(history.history['val_mean_squared_error'])
+    plt.title('MSE curve')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend(['Train', 'Test'], loc='lower right')
+
+    plt.tight_layout()
+    plt.show()
+
+def save_model(model, json_filename, weights_filename):
+    model_json = model.to_json()
+    with open(json_filename, 'w') as json_file:
+        json_file.write(model_json)
+
+    model.save_weights(weights_filename)
+
+
+
+def load_model(json_filename, weights_filename):
+    with open(json_filename, 'r') as json_file:
+        loaded_model_json = json_file.read()
+
+    loaded_model = models.model_from_json(loaded_model_json)
+
+    loaded_model.load_weights(weights_filename)
+    return loaded_model
 
