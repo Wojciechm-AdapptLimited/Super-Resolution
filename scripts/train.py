@@ -1,4 +1,5 @@
 from datetime import datetime
+import argparse
 
 import keras
 from keras.callbacks import TensorBoard
@@ -55,6 +56,13 @@ def train(model, train_generator, validation_generator, epochs=10):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog="train.py", description="script to launch model training")
+
+    parser.add_argument('architecture')
+    parser.add_argument('-E', '--epochs', type=int, default=10)
+
+    args = parser.parse_args()
+
     datagen = ImageDataGenerator(
             rescale=1./255,
             zoom_range=0.2,
@@ -66,7 +74,9 @@ if __name__ == "__main__":
     train_generator = get_generator(datagen, "./data/kaggle/train")
     validation_generator = get_generator(datagen, "./data/kaggle/valid")
 
-    model = get_model("autoencoder")
+    model = get_model(args.architecture)
 
-    train(model, train_generator, validation_generator, epochs=10)
+    train(model, train_generator, validation_generator, epochs=args.epochs)
+
+    model.save_weights("./model/model.h5")
 
