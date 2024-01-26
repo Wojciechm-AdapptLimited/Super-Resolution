@@ -1,0 +1,5 @@
+[core]
+    remote = cv3-remote
+    autostage = true
+['remote "cv3-remote"']
+    url = gdrive://1tOHZ0-9nJsKkr5unLOiKHBjoiDdxV5jq
