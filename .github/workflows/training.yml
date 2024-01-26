@@ -24,7 +24,7 @@ jobs:
           cml runner launch \
               --cloud=azure \
               --cloud-region=eu-west \
-              --cloud-type=STANDARD_D12_V2 \
+              --cloud-type=Standard_D12_v2 \
               --labels=cml-gpu
   train-and-report:
     needs: launch-runner
