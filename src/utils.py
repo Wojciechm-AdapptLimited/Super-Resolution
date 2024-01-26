@@ -84,3 +84,6 @@ def load_model(json_filename, weights_filename):
     loaded_model.load_weights(weights_filename)
     return loaded_model
 
+
+def get_trainable_variables(model):
+	return np.sum([np.prod(v.get_shape().as_list()) for v in model.trainable_variables])
