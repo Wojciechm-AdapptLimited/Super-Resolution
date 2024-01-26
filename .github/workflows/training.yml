@@ -23,7 +23,7 @@ jobs:
         run: |
           cml runner launch \
               --cloud=azure \
-              --cloud-region=west-europe \
+              --cloud-region=eu-west \
               --cloud-type=STANDARD_D12_V2 \
               --labels=cml-gpu
   train-and-report:
@@ -42,5 +42,5 @@ jobs:
         run: |
           pip install -r requirements.txt
           dvc pull
-          python scripts/train.py
+          python scripts/train.py autoencoder 10
           dvc add model/model.h5
