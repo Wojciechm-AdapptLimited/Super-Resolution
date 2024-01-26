@@ -50,7 +50,8 @@ def create_unet(img_shape, input_shape):
 	#up5 = layers.Conv2D(16, (3, 3), activation='relu', padding='same')(up5)
 	merged5 = layers.Concatenate(axis=3)([conv1, up5])
 
-	output = layers.Conv2D(3, (3, 3), activation='sigmoid', padding='same')(merged5)
+	up6 = layers.UpSampling2D(size=(2, 2))(merged5)
+	output = layers.Conv2D(3, (3, 3), activation='sigmoid', padding='same')(up6)
 
 	model = models.Model(inputs=inputs, outputs=output)
 
