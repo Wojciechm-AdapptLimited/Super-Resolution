@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import cv2 as cv
 import PIL.Image
 from IPython.display import display
@@ -87,3 +88,8 @@ def load_model(json_filename, weights_filename):
 
 def get_trainable_variables(model):
 	return np.sum([np.prod(v.get_shape().as_list()) for v in model.trainable_variables])
+
+
+def save_history_to_pd(history,output):
+	hist_df = pd.DataFrame(history.history) 
+	hist_df.to_csv(output)
