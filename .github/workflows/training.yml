@@ -1,0 +1,46 @@
+name: CML + DVC + Tensorboard + Cloud
+
+on:
+  workflow_dispatch:
+
+jobs:
+  launch-runner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.x'
+      - uses: iterative/setup-cml@v1
+      - uses: iterative/setup-dvc@v1
+      - uses: actions/checkout@v3
+      - name: Deploy runner
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          cml runner launch \
+              --cloud=azure \
+              --cloud-region=us-west \
+              --cloud-type=m+t4 \
+              --labels=cml-gpu
+  train-and-report:
+    needs: launch-runner
+    runs-on: [self-hosted, cml-gpu]
+    timeout-minutes: 50400 # 35 days
+    container:
+      image: docker://iterativeai/cml:0-dvc2-base1-gpu
+      options: --gpus all
+    steps:
+      - uses: actions/checkout@v3
+      - name: Train model
+        env:
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLiENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+        run: |
+          pip install -r requirements.txt
+          dvc pull
+          python scripts/train.py
+          dvc add model/model.h5
