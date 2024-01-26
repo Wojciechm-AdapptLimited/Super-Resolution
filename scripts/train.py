@@ -68,5 +68,5 @@ if __name__ == "__main__":
 
     model = get_model("autoencoder")
 
-    train(model, train_generator, validation_generator, epochs=1)
+    train(model, train_generator, validation_generator, epochs=10)
 
