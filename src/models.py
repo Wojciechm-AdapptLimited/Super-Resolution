@@ -1,4 +1,4 @@
-from tensorflow.keras import layers, models
+from keras import layers, models
 from src.blocks.layers import EncoderBlock,DecoderBlock
 
 def create_autoencoder(img_shape,input_shape):
@@ -27,7 +27,7 @@ def create_autoencoder(img_shape,input_shape):
 def create_unet(img_shape, input_shape):
 	inputs = layers.Input(shape=img_shape+(3,))
 
-	resize = (layers.Resizing(*input_shape))(inputs)
+	resize = layers.Resizing(*input_shape)(inputs)
 
 	conv1 = layers.Conv2D(16, (3, 3), activation='relu', padding='same')(resize)
 	#conv1 = layers.Conv2D(16, (3, 3), activation='relu', padding='same')(conv1)
@@ -56,3 +56,14 @@ def create_unet(img_shape, input_shape):
 	model = models.Model(inputs=inputs, outputs=output)
 
 	return model
+
+def create_srcnn(img_shape, input_shape):
+	inputs = layers.Input(shape=img_shape+(3,))
+
+	resize = layers.Resizing(*input_shape)(inputs)
+
+	conv1 = layers.Conv2D(64, (3, 3), activation='relu', padding='same')(resize)
+	conv2 = layers.Conv2D(32, (1, 1), activation='relu', padding='same')(conv1)
+	conv3 = layers.Conv2D(3, (5, 5), activation='relu', padding='same')(conv2)
+
+	return models.Model(inputs=inputs, outputs=conv3)
