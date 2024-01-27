@@ -1,4 +1,4 @@
-name: CML + DVC + Tensorboard + Cloud
+name: CML + DVC + Tensorboard
 
 on:
   workflow_dispatch:
@@ -17,8 +17,7 @@ jobs:
           python-version: '3.10.x'
       - name: Train model
         env:
-          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          GDRIVE_CLiENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
           pip install -r requirements.txt
           dvc pull
