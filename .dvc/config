@@ -3,3 +3,4 @@
     autostage = true
 ['remote "cv3-remote"']
     url = gdrive://1tOHZ0-9nJsKkr5unLOiKHBjoiDdxV5jq
+    gdrive_use_service_account = true
