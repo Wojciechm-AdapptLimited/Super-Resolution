@@ -1,0 +1,12 @@
+stages:
+  train:
+    cmd: python scripts/train.py autoencoder -E 10
+    deps:
+    - data/kaggle
+    - scripts/train.py
+    metrics:
+    - metrics.json:
+        cache: false
+    plots:
+    - loss.csv:
+        cache: false
