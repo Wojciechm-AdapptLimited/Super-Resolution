@@ -40,7 +40,7 @@ def seed_everything(seed=42):
     tf.random.set_seed(seed)
     random.seed(seed)
 
-plot_model = lambda m: tf.keras.utils.plot_model(m,to_file="./ignore/model.png",show_shapes=True, show_layer_names=False)
+plot_model = lambda m: tf.keras.utils.plot_model(m,to_file="model.png",show_shapes=True, show_layer_names=False)
 
 def plot_history(history):
     # Plot learning curves

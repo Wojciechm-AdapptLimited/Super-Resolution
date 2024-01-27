@@ -59,11 +59,10 @@ def create_unet(img_shape, input_shape):
 
 def create_srcnn(img_shape, input_shape):
 	inputs = layers.Input(shape=img_shape+(3,))
-
 	resize = layers.Resizing(*input_shape)(inputs)
-
 	conv1 = layers.Conv2D(64, (3, 3), activation='relu', padding='same')(resize)
 	conv2 = layers.Conv2D(32, (1, 1), activation='relu', padding='same')(conv1)
-	conv3 = layers.Conv2D(3, (5, 5), activation='relu', padding='same')(conv2)
+	up = layers.UpSampling2D()(conv2)
+	conv3 = layers.Conv2D(3, (5, 5), activation='relu', padding='same')(up)
 
 	return models.Model(inputs=inputs, outputs=conv3)

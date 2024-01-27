@@ -5,19 +5,28 @@ import keras
 from keras.callbacks import TensorBoard
 from keras.preprocessing.image import ImageDataGenerator
 
-from src.models import create_autoencoder, create_unet
+from src.models import create_autoencoder, create_srcnn, create_unet
 
 IMG_SHAPE = (400, 400)
 INPUT_SHAPE = (200, 200)
 
 
 def get_model(name: str):
+    if name == "srcnn":
+        model = create_srcnn(IMG_SHAPE, INPUT_SHAPE)
+        model.build(IMG_SHAPE + (3, ))
+        model.compile(optimizer=keras.optimizers.Adam(),
+                      loss='mae',
+                      metrics=['mse', 'mean_squared_logarithmic_error']
+                      )
+        return model
+
     if name == "autoencoder":
         model = create_autoencoder(IMG_SHAPE, INPUT_SHAPE)
-        model.build()
+        model.build(IMG_SHAPE + (3, ))
         model.compile(optimizer=keras.optimizers.Adam(), 
                       loss='mae',
-                      metrics=['mse']
+                      metrics=['mse', 'sum']
                       )
         return model
     if name == "unet":

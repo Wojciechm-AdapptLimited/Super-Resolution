@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python scripts/train.py autoencoder -E 10
+    cmd: python scripts/train.py srcnn -E 10
     deps:
     - data/kaggle
     - scripts/train.py
