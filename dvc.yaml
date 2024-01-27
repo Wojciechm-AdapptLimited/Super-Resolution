@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python scripts/train.py srcnn -E 10
+    cmd: python scripts/train.py unet -E 15
     deps:
     - data/kaggle
     - scripts/train.py
