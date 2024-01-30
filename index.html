@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Enhancer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Enhancer</h1>
+	<div id="input-control">
+	    <input type="file" id="imageInput" accept="image/*">
+	    <button disabled id="uploadButton">Enhance Image</button>
+	</div>
+	<div id="result"> 
+	    <div id="originalImageContainer">
+    		<h2>Original Image</h2>
+		<img id="originalImage" src="" alt="Uploaded Image will appear here">
+	    </div>
+	    <div id="enhancedImageContainer">
+	    	<h2>Enhanced Image</h2>
+		<img id="enhancedImage" src="" alt="Enhanced Image will appear here">
+	    </div>
+	</div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>	
+</body>
+</html>
