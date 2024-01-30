@@ -87,5 +87,5 @@ if __name__ == "__main__":
 
     train(model, train_generator, validation_generator, epochs=args.epochs)
 
-    model.save_weights("./model/model.keras")
+    model.save("./model/model.keras")
 
