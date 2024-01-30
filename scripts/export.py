@@ -11,20 +11,28 @@ def get_model_path(name: str):
 
     if name not in model_names:
         raise ValueError(f"Model {name} not found in {MODEL_DIR}")
-    if name in models:
-        raise ValueError(f"Model {name} already exported")
 
-    return os.path.join(MODEL_DIR, name + ".keras")
+    return os.path.join(MODEL_DIR, name)
 
 
-def export_model(name: str, path: str):
-    model = models.load_model(path)
+def export_model(path: str):
+    model = models.load_model(path + ".keras")
 
     if model is None:
         raise ValueError(f"Model {path} not found")
 
-    model.save(os.path.join(MODEL_DIR, name))
+    if not os.path.exists(path):
+        os.mkdir(path)
 
+    exports = os.listdir(path)
+    exports = list(map(int, exports))
+
+    if len(exports) == 0:
+        max_export = 0
+    else:
+        max_export = max(exports)
+    
+    model.export(os.path.join(path, str(max_export + 1)))
 
 
 if __name__ == "__main__":
@@ -37,5 +45,7 @@ if __name__ == "__main__":
 
     model_path = get_model_path(args.architecture)
 
-    export_model(args.architecture, model_path)
+    export_model(model_path)
+
+    print("Export complete.")
 

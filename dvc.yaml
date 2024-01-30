@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python scripts/train.py unet -E 15
+    cmd: python scripts/train.py UNet -E 40
     deps:
     - data/kaggle
     - scripts/train.py
@@ -10,3 +10,11 @@ stages:
     plots:
     - loss.csv:
         cache: false
+    outs:
+    - model/UNet.keras
+  export:
+    cmd: python scripts/export.py UNet
+    deps:
+    - model/UNet.keras
+    outs:
+    - model/UNet

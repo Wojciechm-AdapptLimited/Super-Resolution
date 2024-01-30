@@ -2,7 +2,7 @@ from datetime import datetime
 import argparse
 
 import keras
-from keras.callbacks import TensorBoard
+from keras.callbacks import EarlyStopping, TensorBoard
 from keras.preprocessing.image import ImageDataGenerator
 
 from src.models import create_autoencoder, create_srcnn, create_unet
@@ -12,7 +12,7 @@ INPUT_SHAPE = (200, 200)
 
 
 def get_model(name: str):
-    if name == "srcnn":
+    if name == "SRCNN":
         model = create_srcnn(IMG_SHAPE, INPUT_SHAPE)
         model.build(IMG_SHAPE + (3, ))
         model.compile(optimizer=keras.optimizers.Adam(),
@@ -21,7 +21,7 @@ def get_model(name: str):
                       )
         return model
 
-    if name == "autoencoder":
+    if name == "Autoencoder":
         model = create_autoencoder(IMG_SHAPE, INPUT_SHAPE)
         model.build(IMG_SHAPE + (3, ))
         model.compile(optimizer=keras.optimizers.Adam(), 
@@ -29,7 +29,7 @@ def get_model(name: str):
                       metrics=['mse', 'sum']
                       )
         return model
-    if name == "unet":
+    if name == "UNet":
         model = create_unet(IMG_SHAPE, INPUT_SHAPE)
         model.build(IMG_SHAPE + (3, ))
         model.compile(optimizer='adam', 
@@ -52,15 +52,14 @@ def get_generator(datagen: ImageDataGenerator, dir: str, target_size=IMG_SHAPE, 
 
 
 def train(model, train_generator, validation_generator, epochs=10):
-    logdir = f"logs/fit/{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-    tensorboard_callback = TensorBoard(log_dir=logdir)
+    early_stopping = EarlyStopping(monitor='val_mean_squared_error', patience=3, restore_best_weights=True)
 
     model.fit(
             train_generator,
             epochs=epochs,
             verbose=0,
             validation_data=validation_generator,
-            callbacks=[tensorboard_callback]
+            callbacks=[early_stopping]
     )
 
 
@@ -87,5 +86,5 @@ if __name__ == "__main__":
 
     train(model, train_generator, validation_generator, epochs=args.epochs)
 
-    model.save("./model/model.keras")
+    model.save(f"./model/{args.architecture}.keras")
 
